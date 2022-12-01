@@ -10,6 +10,8 @@ export interface PeaceOfNews {
   createdAt: number
 }
 
+const cash = new Set();
+
 export function News(props: NewsProps) {
   const [news, setNews] = useState([] as PeaceOfNews[]);
   const sortNews = (news: PeaceOfNews[]) => {
@@ -20,9 +22,11 @@ export function News(props: NewsProps) {
     fetch('http://localhost:3333/api/news')
       .then(response => response.json())
       .then(news => {
-        const sortedNews = sortNews(news);
-
-        setNews(sortedNews);
+         if(!cash.has(news)){
+          cash.clear();
+          cash.add(news);
+          setNews([]); // только для перерисовки
+        }
       })
   }, []);
 
@@ -30,7 +34,8 @@ export function News(props: NewsProps) {
     <div>
       <h1>Последние новости</h1>
       <ul>
-      {news.map(peaceOfNews => {
+      {sortNews([...cash].flat() as PeaceOfNews[])
+      .map(peaceOfNews => {
         return <li key={peaceOfNews.id}>
           <h2>{peaceOfNews.title}</h2>
           <p>{peaceOfNews.description}</p>
