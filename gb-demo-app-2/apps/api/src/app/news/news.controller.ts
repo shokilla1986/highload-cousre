@@ -40,7 +40,6 @@ export class NewsController {
       }
 
       setTimeout(() => {
-        // resolve(news);
         resolve(resCash);
       }, 100);
     });
@@ -52,7 +51,10 @@ export class NewsController {
     return new Promise((resolve) => {
       setTimeout(() => {
         console.log('Новость успешно создана', peaceOfNews);
-        resolve({ id: Math.ceil(Math.random() * 1000), ...peaceOfNews });
+        const item = { id: Math.ceil(Math.random() * 1000), ...peaceOfNews };
+        db.set(item.id, item);
+        resCash = Array.from(db.values()).flat();
+        resolve(item);
       }, 100);
     });
   }
