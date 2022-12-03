@@ -25,7 +25,7 @@ export function News(props: NewsProps) {
          if(!cash.has(news)){
           cash.clear();
           cash.add(news);
-          setNews([]); // только для перерисовки
+          setNews([]);
         }
       })
   }, []);
