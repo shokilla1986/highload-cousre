@@ -26,6 +26,7 @@ export function News(props: NewsProps) {
           cash.clear();
           cash.add(news);
           setNews([]);
+
         }
       })
   }, []);
