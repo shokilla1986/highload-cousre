@@ -11,7 +11,7 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "commonjs",
-    "lib": ["es2018", "dom", "dom.Iterable"],
+    "lib": ["es2019", "dom", "dom.Iterable"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
