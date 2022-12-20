@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Header, Post, Param } from '@nestjs/common';
 import { IsNotEmpty } from 'class-validator';
 // import memjs from 'memjs';
-import Redis from 'ioredis';
+// import Redis from 'ioredis';
 
 // const memcached = memjs.Client.create();
-const redis = new Redis();
+// const redis = new Redis();
 
 export class CreateNewsDto {
   @IsNotEmpty()
