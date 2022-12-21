@@ -1,10 +1,11 @@
 import { Body, Controller, Get, Header, Post, Param } from '@nestjs/common';
+
 import { IsNotEmpty } from 'class-validator';
 // import memjs from 'memjs';
-// import Redis from 'ioredis';
+import Redis from 'ioredis';
 
 // const memcached = memjs.Client.create();
-// const redis = new Redis();
+const redis = new Redis();
 
 export class CreateNewsDto {
   @IsNotEmpty()
@@ -14,31 +15,73 @@ export class CreateNewsDto {
   description: string;
 }
 
+let cashe;
 @Controller('news')
 export class NewsController {
   @Get()
   async getNews() {
-    return new Promise((resolve) => {
-      const news = Object.keys([...Array(20)])
-        .map((key) => Number(key) + 1)
-        .map((n) => ({
-          id: n,
-          title: `Важная новость ${n}`,
-          description: ((rand) =>
-            [...Array(rand(1000))]
-              .map(() =>
-                rand(10 ** 16)
-                  .toString(36)
-                  .substring(rand(10))
-              )
-              .join(' '))((max) => Math.ceil(Math.random() * max)),
-          createdAt: Date.now(),
-        }));
+    if (!cashe) {
+      const result = new Promise((resolve) => {
+        const news = Object.keys([...Array(20)])
+          .map((key) => Number(key) + 1)
+          .map((n) => ({
+            id: n,
+            title: `Важная новость ${n}`,
+            description: ((rand) =>
+              [...Array(rand(1000))]
+                .map(() =>
+                  rand(10 ** 16)
+                    .toString(36)
+                    .substring(rand(10))
+                )
+                .join(' '))((max) => Math.ceil(Math.random() * max)),
+            createdAt: Date.now(),
+          }));
 
-      setTimeout(() => {
         resolve(news);
-      }, 100);
-    });
+        // setTimeout(() => {
+        //   resolve(news);
+        // }, 100);
+      });
+      await redis.set('cashe', result);
+      // cashe = await redis.get('cashe');
+      cashe = new Promise((resolve, rejects) => {
+        resolve(result);
+      });
+
+      cashe.then((result) => {
+        console.log('result: ', result);
+      });
+      console.log('cashe: ', cashe);
+      return result;
+    } else {
+      console.log('hohohoho');
+
+      return cashe;
+    }
+    // const result = new Promise((resolve) => {
+    //   const news = Object.keys([...Array(20)])
+    //     .map((key) => Number(key) + 1)
+    //     .map((n) => ({
+    //       id: n,
+    //       title: `Важная новость ${n}`,
+    //       description: ((rand) =>
+    //         [...Array(rand(1000))]
+    //           .map(() =>
+    //             rand(10 ** 16)
+    //               .toString(36)
+    //               .substring(rand(10))
+    //           )
+    //           .join(' '))((max) => Math.ceil(Math.random() * max)),
+    //       createdAt: Date.now(),
+    //     }));
+
+    //   resolve(news);
+    //   // setTimeout(() => {
+    //   //   resolve(news);
+    //   // }, 100);
+    // });
+    // return result;
   }
 
   @Post()
