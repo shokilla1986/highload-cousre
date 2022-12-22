@@ -15,6 +15,8 @@ export class CreateNewsDto {
   description: string;
 }
 
+const authors = ['Po', 'Ro', 'ChiCho', 'Li'];
+
 let cashe;
 @Controller('news')
 export class NewsController {
@@ -25,6 +27,7 @@ export class NewsController {
         .map((key) => Number(key) + 1)
         .map((n) => ({
           id: n,
+          author: authors[Math.floor(Math.random() * authors.length)],
           title: `Важная новость ${n}`,
           description: ((rand) =>
             [...Array(rand(1000))]
@@ -39,7 +42,7 @@ export class NewsController {
 
       redis.set('key', JSON.stringify(news));
       cashe = await redis.get('key');
-      console.log('test: ', cashe);
+      // console.log('test: ', JSON.parse(cashe));
 
       return news;
     } else {
@@ -56,6 +59,7 @@ export class NewsController {
     const newNews = {
       id: Math.ceil(Math.random() * 1000),
       ...peaceOfNews,
+      author: authors[Math.floor(Math.random() * authors.length)],
       createdAt: Date.now(),
     };
 
@@ -101,5 +105,9 @@ export class NewsController {
     console.log('result', result);
 
     return result;
+  }
+  @Get('raiting')
+  async raiting() {
+    return 'result';
   }
 }

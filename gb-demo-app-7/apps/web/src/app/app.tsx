@@ -25,6 +25,9 @@ export function App() {
           <li>
             <Link to="/create">Добавить новость</Link>
           </li>
+          <li>
+            {/* <Link to="/raiting">Рейтинг</Link> */}
+          </li>
         </ul>
       </div>
       <Route

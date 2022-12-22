@@ -4,6 +4,7 @@ import React, { ChangeEvent } from 'react';
 /* eslint-disable-next-line */
 export interface CreateNewsProps {}
 export interface CreateNewsState {
+
   title: string,
   description: string,
 }
@@ -13,6 +14,7 @@ class CreateNews extends React.Component<CreateNewsProps, Partial<CreateNewsStat
     super(props);
     this.state = {
       title: '',
+
       description: ''
     };
 

@@ -6,6 +6,7 @@ export interface NewsProps {}
 export interface PeaceOfNews {
   id: number,
   title: string,
+  author: string,
   description: string,
   createdAt: number
 }
@@ -34,6 +35,7 @@ export function News(props: NewsProps) {
       {news.map(peaceOfNews => {
         return <li key={peaceOfNews.id}>
           <h2>{peaceOfNews.title}</h2>
+          <h3>{ peaceOfNews.author}</h3>
           <p>{peaceOfNews.description}</p>
           <hr/>
         </li>
